@@ -5,7 +5,7 @@
 
 <h4>Installing the ncurses Library</h4>
 
-**Linux (Ubuntu/Debian)**<br>
+Linux (Ubuntu/Debian)<br>
 `sudo apt-get update`<br>
 `sudo apt-get install libncurses5-dev`
 

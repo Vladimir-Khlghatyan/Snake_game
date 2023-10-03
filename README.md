@@ -16,3 +16,7 @@ macOS (using Homebrew)<br>
 `brew install ncurses`<br><br>
 
 <h4>2) After installing the ncurses Library:</h4>
+  - open terminal <br>
+  - make the game `make` <br>
+  - run executable file `./Geme [height] [width]` <br>
+  - use arrow keys to control <br>

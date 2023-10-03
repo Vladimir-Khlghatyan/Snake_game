@@ -31,17 +31,21 @@ void Snake::initBoard(void)
     for (int i{}; i < _height; ++i)
         _board.push_back(vs(_width, " "));
 
-    _board[3][1] = RED + string(1, '*') + RESET;
-    _board[2][1] = RED + string(1, '*') + RESET;
-    _board[1][1] = RED + string(1, '*') + RESET;
-    _board[1][2] = RED + string(1, '*') + RESET;
+    for (int j{}; j < _height; ++j)
+        for (int i{}; i < _width; ++i)
+            _freeIndexes.insert({j, i});
 
-    _order.push({3, 1});
-    _order.push({2, 1});
-    _order.push({1, 1});
-    _order.push({1, 2});
+    vector<pair<int, int>> initPos = {{3, 1},{2, 1},{1, 1},{1, 2}};
 
-    _head = {1, 2};
+    _head = initPos.back();
+
+    for (auto& point : initPos)
+    {
+        _board[point.first][point.second] = RED + string(1, '*') + RESET;
+        _order.push(point);
+        _usedIndexes.insert(point);
+        _freeIndexes.erase(point);
+    }
 }
 
 void Snake::printBoard(int mode)

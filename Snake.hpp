@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <queue>
+#include <set>
 #include <ncurses.h>
 #include <thread>
 #include <chrono>
@@ -19,22 +20,26 @@
 #define RESET	"\33[0;m"
 
 using namespace std;
-using vs = vector<string>;
-using vvs = vector<vector<string>>;
-using pii = pair<int, int>;
-using qpii = queue<pair<int, int>>;
+using vs	= vector<string>;
+using vvs	= vector<vector<string>>;
+using pii	= pair<int,int>;
+using qpii	= queue<pair<int,int>>;
+using spii	= set<pair<int,int>>;
 
 class Snake
 {
 	private:
+		int		_direction;		// 1 right, 2 down, 3 left, 4 up
+		int		_speed; 		// update time in milliseconds
+		int 	_score;
 		int		_height;
 		int		_width;
+
 		vvs		_board;
 		pii 	_head;
 		qpii	_order;
-		int		_direction;			// 1 right, 2 down, 3 left, 4 up
-		int		_speed; 			// update time in milliseconds
-		int 	_score;
+		spii	_usedIndexes;
+		spii	_freeIndexes;
 
 	public:
 		Snake(int height, int width);

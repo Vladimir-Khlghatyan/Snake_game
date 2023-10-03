@@ -9,6 +9,9 @@ Snake::Snake(int height, int width)
     _height = height;
     _width = width;
 
+    _chance = 2;
+    _currentChance = _chance;
+
     // initialize <ncurses.h> library  --------------------------
     initscr();              // Initialize the ncurses library
     raw();                  // Disable line buffering
@@ -52,8 +55,10 @@ void Snake::initBoard(void)
 
 void Snake::printBoard(int mode)
 {
-    if (mode == 0)  cout << "\rPress ESC to quit." << endl;
-    else            cout << RESET <<"\rGame over!\nYour score is: " << _score << endl;
+    if (mode == 0)\
+        cout << "\rPress ESC to quit.\n\rScore: " << CYAN << _score << RESET << endl;
+    else
+        cout << RESET <<"\rGame over!\nScore: " << _score << endl;
 
     cout << "\r+" << string(_width, '-') << "+" << endl;
 
@@ -65,6 +70,7 @@ void Snake::printBoard(int mode)
     }
 
     cout << "\r+" << string(_width, '-') << "+" << endl;
+    cout << "\r \u00A9 Author: Vladimir Khlghatyan" << endl;
 }
 
 void Snake::updateDirection(int key)
@@ -91,7 +97,7 @@ void Snake::updateDirection(int key)
     }
 }
 
-void Snake::updateBoard(void)
+bool Snake::updateBoard(void)
 {
     bool frogEated{false};
 
@@ -99,7 +105,12 @@ void Snake::updateBoard(void)
     // right
     case 1 :
         if (_head.second == _width - 1)
-            this->gameOver(), exit(0);
+        {
+            if (_currentChance--)
+                return false;
+            this->gameOver();
+            exit(0);
+        }
         ++_head.second;
         if (_board[_head.first][_head.second] == SNAKE)
             this->gameOver(), exit(0);
@@ -108,7 +119,12 @@ void Snake::updateBoard(void)
     // down
     case 2 :
         if (_head.first == _height - 1)
-            this->gameOver(), exit(0);
+        {
+            if (_currentChance--)
+                return false;
+            this->gameOver();
+            exit(0);
+        }
         ++_head.first;
         if (_board[_head.first][_head.second] == SNAKE)
             this->gameOver(), exit(0);
@@ -117,7 +133,12 @@ void Snake::updateBoard(void)
     // left
     case 3 :
         if (_head.second == 0)
-            this->gameOver(), exit(0);
+        {
+            if (_currentChance--)
+                return false;
+            this->gameOver();
+            exit(0);
+        }
         --_head.second;
         if (_board[_head.first][_head.second] == SNAKE)
             this->gameOver(), exit(0);
@@ -126,7 +147,12 @@ void Snake::updateBoard(void)
     // up
     case 4 :
         if (_head.first == 0)
-           this->gameOver(), exit(0);
+        {
+            if (_currentChance--)
+                return false;
+            this->gameOver();
+            exit(0);
+        }
         --_head.first;
         if (_board[_head.first][_head.second] == SNAKE)
             this->gameOver(), exit(0);
@@ -151,13 +177,18 @@ void Snake::updateBoard(void)
     {
         ++_score;
         auto frog = this->getRandomPoint();
-        _board[frog.first][frog.second] = FROG;        
+        _board[frog.first][frog.second] = FROG;
+
+        if (_score % 5 == 0)
+            _speed -= 50;
     }
+
+    return true;
 }
 
 void Snake::clearTerminal(void)
 {
-    for (int i{}; i < _height + 3; ++i)
+    for (int i{}; i < _height + 5; ++i)
 		cout << "\033[A" << "\033[K";
 }
 
@@ -180,7 +211,8 @@ void Snake::play(void)
             break;
         this_thread::sleep_for(chrono::milliseconds(_speed));
         this->updateDirection(key);
-        this->updateBoard();
+        if (this->updateBoard())
+            _currentChance = _chance;
         this->clearTerminal();
         this->printBoard(0);
     }

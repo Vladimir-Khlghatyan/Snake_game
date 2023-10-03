@@ -1,11 +1,11 @@
-SRCS		= ${wildcard ./*.cpp}
+SRCS		= ${wildcard ./srcs/*.cpp}
 OBJS 		= ${SRCS:.cpp=.o}
 CC			= c++
 RM			= rm -f
-CPPFLAGS	= -lncurses -std=c++2a -I./
-NAME		= Game
+CPPFLAGS	= -lncurses -std=c++2a -I./includes
+NAME		= SnakeGame
 
-%.o: %.cpp *.hpp
+%.o: %.cpp ./includes/*.hpp
 			@$(CC) ${CPPFLAGS} -c $< -o $@
 
 $(NAME):	$(OBJS)

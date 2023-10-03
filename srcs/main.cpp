@@ -1,6 +1,6 @@
 #include "Snake.hpp"
 
-int main(int ac, char **av)
+int main(void)
 {
     Snake s(20, 40);
     s.play();

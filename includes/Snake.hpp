@@ -20,8 +20,8 @@
 #define WHITE	"\33[1;37m"
 #define RESET	"\33[0;m"
 
-#define SNAKE	"\33[1;31m*\33[0;m"
-#define FROG	"\33[1;32mo\33[0;m"
+#define SNAKE	"\33[1;31mo\33[0;m"
+#define FROG	"\33[1;32m*\33[0;m"
 
 using namespace std;
 using vs	= vector<string>;
@@ -45,6 +45,9 @@ class Snake
 		spii	_usedIndexes;
 		spii	_freeIndexes;
 
+		int 	_chance;
+		int 	_currentChance;
+
 	public:
 		Snake(int height, int width);
 		~Snake(void);
@@ -52,7 +55,7 @@ class Snake
 		void 	initBoard(void);
 		void	printBoard(int mode);
 		void	updateDirection(int key);
-		void	updateBoard(void);
+		bool	updateBoard(void);
 		void	clearTerminal(void);
 		pii		getRandomPoint(void);
 		void	play(void);

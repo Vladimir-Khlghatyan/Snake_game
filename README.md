@@ -13,6 +13,6 @@ Linux (Red Hat/CentOS)<br>
 `sudo yum install ncurses-devel`
 
 macOS (using Homebrew)<br>
-`brew install ncurses`
+`brew install ncurses`<br>
 
 <h4>After installing the ncurses Library:</h4>

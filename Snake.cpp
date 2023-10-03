@@ -130,9 +130,19 @@ void Snake::clearTerminal(void)
 		cout << "\033[A" << "\033[K";
 }
 
-int Snake::getSpeed(void)
+void Snake::play(void)
 {
-    return _speed;
+    while (true)
+    {
+        int key = getch();  // Wait for user input;
+        if (key == 27)
+            break;
+        this_thread::sleep_for(chrono::milliseconds(_speed));
+        this->updateDirection(key);
+        this->updateBoard();
+        this->clearTerminal();
+        this->printBoard(0);
+    }
 }
 
 void Snake::gameOver(void)

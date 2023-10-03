@@ -1,23 +1,9 @@
 #include "Snake.hpp"
 
-using namespace std;
-
 int main(int ac, char **av)
 {
     Snake s(20, 40);
-
-    while (true)
-    {
-        int key = getch();       // Wait for user input;
-        if (key == 27)
-            break;
-        this_thread::sleep_for(chrono::milliseconds(s.getSpeed()));
-        s.updateDirection(key);
-        s.updateBoard();
-        s.clearTerminal();
-        s.printBoard(0);
-    }
-
+    s.play();
     s.gameOver();
 
     return 0;

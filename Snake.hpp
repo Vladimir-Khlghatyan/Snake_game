@@ -45,6 +45,6 @@ class Snake
 		void	updateDirection(int key);
 		void	updateBoard(void);
 		void	clearTerminal(void);
-		int		getSpeed(void);
+		void	play(void);
 		void	gameOver(void);
 };

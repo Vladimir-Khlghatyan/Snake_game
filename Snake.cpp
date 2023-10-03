@@ -36,16 +36,18 @@ void Snake::initBoard(void)
             _freeIndexes.insert({j, i});
 
     vector<pair<int, int>> initPos = {{3, 1},{2, 1},{1, 1},{1, 2}};
-
     _head = initPos.back();
-
     for (auto& point : initPos)
     {
-        _board[point.first][point.second] = RED + string(1, '*') + RESET;
+        _board[point.first][point.second] = SNAKE;
         _order.push(point);
         _usedIndexes.insert(point);
         _freeIndexes.erase(point);
     }
+
+    auto frog = this->getRandomPoint();
+    _board[frog.first][frog.second] = FROG;
+
 }
 
 void Snake::printBoard(int mode)
@@ -91,47 +93,82 @@ void Snake::updateDirection(int key)
 
 void Snake::updateBoard(void)
 {
+    bool frogEated{false};
+
     switch (_direction) {
     // right
     case 1 :
         if (_head.second == _width - 1)
             this->gameOver(), exit(0);
         ++_head.second;
+        if (_board[_head.first][_head.second] == SNAKE)
+            this->gameOver(), exit(0);
+        frogEated = (_board[_head.first][_head.second] == FROG);
         break;
     // down
     case 2 :
         if (_head.first == _height - 1)
             this->gameOver(), exit(0);
         ++_head.first;
+        if (_board[_head.first][_head.second] == SNAKE)
+            this->gameOver(), exit(0);
+        frogEated = (_board[_head.first][_head.second] == FROG);
         break;
     // left
     case 3 :
         if (_head.second == 0)
             this->gameOver(), exit(0);
         --_head.second;
+        if (_board[_head.first][_head.second] == SNAKE)
+            this->gameOver(), exit(0);
+        frogEated = (_board[_head.first][_head.second] == FROG);
         break;
     // up
     case 4 :
         if (_head.first == 0)
            this->gameOver(), exit(0);
         --_head.first;
+        if (_board[_head.first][_head.second] == SNAKE)
+            this->gameOver(), exit(0);
+        frogEated = (_board[_head.first][_head.second] == FROG);
         break;
 
     default :
         break;
+    }    
+
+    _board[_head.first][_head.second] = SNAKE;
+    _order.push(_head);
+    _usedIndexes.insert(_head);
+
+    if (!frogEated)
+    {
+        _board[_order.front().first][_order.front().second] = " ";
+        _freeIndexes.erase(_order.front());
+        _order.pop();
     }
-
-    _board[_order.front().first][_order.front().second] = " ";
-    _order.pop();
-
-    _board[_head.first][_head.second] = RED + string(1, '*') + RESET;
-    _order.push({_head.first, _head.second});
+    else
+    {
+        ++_score;
+        auto frog = this->getRandomPoint();
+        _board[frog.first][frog.second] = FROG;        
+    }
 }
 
 void Snake::clearTerminal(void)
 {
     for (int i{}; i < _height + 3; ++i)
 		cout << "\033[A" << "\033[K";
+}
+
+pii Snake::getRandomPoint(void)
+{
+    srand((unsigned)time(NULL));
+    int random = rand() % _freeIndexes.size();
+    auto it = _freeIndexes.begin();
+    while (random--)
+        ++it;
+    return *it;
 }
 
 void Snake::play(void)

@@ -9,6 +9,7 @@
 #include <thread>
 #include <chrono>
 #include <algorithm>
+#include <stdlib.h>
 
 #define RED		"\33[1;31m"
 #define GREEN	"\33[1;32m"
@@ -18,6 +19,9 @@
 #define CYAN	"\33[1;36m"
 #define WHITE	"\33[1;37m"
 #define RESET	"\33[0;m"
+
+#define SNAKE	"\33[1;31m*\33[0;m"
+#define FROG	"\33[1;32mo\33[0;m"
 
 using namespace std;
 using vs	= vector<string>;
@@ -50,6 +54,7 @@ class Snake
 		void	updateDirection(int key);
 		void	updateBoard(void);
 		void	clearTerminal(void);
+		pii		getRandomPoint(void);
 		void	play(void);
 		void	gameOver(void);
 };

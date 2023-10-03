@@ -17,7 +17,6 @@ macOS (using Homebrew)<br>
 `brew install ncurses`<br><br>
 
 **2) After installing the ncurses Library:**<br>
-`sudo yum install ncurses-devel`
   - open the terminal <br>
   - make the game `make` <br>
   - run executable file `./Geme [height] [width]` <br>

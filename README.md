@@ -18,7 +18,14 @@
 
 **2) After installing the ncurses Library:**<br>
   - open the terminal <br>
-  - make the game `make` <br>
-  - run the executable file `./Geme [height] [width]` <br>
+  - glone the repository <br>
+    `git clone https://github.com/Vladimir-Khlghatyan/Snake_game` <br>
+  - go to Snake_game directory <br>
+    `cd ./Snake_game` <br>
+  - make the game <br>
+    `make`<br>
+  - run the executable file <br>
+    `./Geme [height] [width]` <br>
   - use arrow keys to control <br>
+  - enjoy :)
 

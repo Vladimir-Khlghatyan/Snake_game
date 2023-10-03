@@ -3,8 +3,8 @@
 <h2>You can play the Snake game on Unix-like operating systems (Linux / maxOS).</h2>
 <h3>To play you need to install the ncurses Library.</h3>
 
-<h4>1) Installing the ncurses Library</h4>
-
+**1) Installing the ncurses Library**<br>
+  
 Linux (Ubuntu/Debian)<br>
 `sudo apt-get update`<br>
 `sudo apt-get install libncurses5-dev`
@@ -12,11 +12,14 @@ Linux (Ubuntu/Debian)<br>
 Linux (Red Hat/CentOS)<br>
 `sudo yum install ncurses-devel`
 
+
 macOS (using Homebrew)<br>
 `brew install ncurses`<br><br>
 
-<h4>2) After installing the ncurses Library:</h4>
-  - open terminal <br>
+**2) After installing the ncurses Library:**<br>
+`sudo yum install ncurses-devel`
+  - open the terminal <br>
   - make the game `make` <br>
   - run executable file `./Geme [height] [width]` <br>
   - use arrow keys to control <br>
+

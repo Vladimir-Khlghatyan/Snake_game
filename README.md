@@ -5,16 +5,16 @@
 
 **1) Installing the ncurses Library**<br>
   
-Linux (Ubuntu/Debian)<br>
-`sudo apt-get update`<br>
-`sudo apt-get install libncurses5-dev`
+  - Linux (Ubuntu/Debian)<br>
+    `sudo apt-get update`<br>
+    `sudo apt-get install libncurses5-dev`
 
-Linux (Red Hat/CentOS)<br>
-`sudo yum install ncurses-devel`
+  - Linux (Red Hat/CentOS)<br>
+    `sudo yum install ncurses-devel`
 
 
-macOS (using Homebrew)<br>
-`brew install ncurses`<br><br>
+  - macOS (using Homebrew)<br>
+    `brew install ncurses`<br><br>
 
 **2) After installing the ncurses Library:**<br>
   - open the terminal <br>

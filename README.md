@@ -19,6 +19,6 @@
 **2) After installing the ncurses Library:**<br>
   - open the terminal <br>
   - make the game `make` <br>
-  - run executable file `./Geme [height] [width]` <br>
+  - run the executable file `./Geme [height] [width]` <br>
   - use arrow keys to control <br>
 

@@ -1,6 +1,6 @@
 # Snake_game
 
-You can play the Snake game on Unix-like operating systems (Linux / maxOS).
+You can play the Snake game on Unix-like operating systems (Linux / maxOS).\n
 To play the Snake game, you need to install the ncurses Library.
 
 **Installing the ncurses Library**

@@ -2,7 +2,7 @@ SRCS		= ${wildcard ./srcs/*.cpp}
 OBJS 		= ${SRCS:.cpp=.o}
 CC			= c++
 RM			= rm -f
-CPPFLAGS	= -lncurses -std=c++2a -I./includes
+CPPFLAGS	= -std=c++2a -I./includes
 NAME		= SnakeGame
 
 %.o: %.cpp ./includes/*.hpp

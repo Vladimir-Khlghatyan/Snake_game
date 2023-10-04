@@ -12,14 +12,7 @@ Snake::Snake(int height, int width)
     _chance = 2;
     _currentChance = _chance;
 
-    // initialize <ncurses.h> library  --------------------------
-    initscr();              // Initialize the ncurses library
-    raw();                  // Disable line buffering
-    keypad(stdscr, TRUE);   // Enable special keys
-    noecho();               // Do not display user input
-    nodelay(stdscr, TRUE);  // Enable non-blocking input mode
-    //-----------------------------------------------------------
-
+    this->initNecessaryLibraries();
     this->initBoard();
     this->printBoard(0);
 }
@@ -27,6 +20,21 @@ Snake::Snake(int height, int width)
 Snake::~Snake(void)
 {
 
+}
+
+void Snake::initNecessaryLibraries(void)
+{
+    // Save current terminal settings
+    tcgetattr(STDIN_FILENO, &_oldt);
+    _newt = _oldt;
+
+    // Disable canonical mode (line buffering) and echoing
+    _newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &_newt);
+
+    // Set non-blocking mode for stdin
+    int oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
+    fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
 }
 
 void Snake::initBoard(void)
@@ -58,14 +66,15 @@ void Snake::printBoard(int mode)
     if (mode == 0)\
         cout << "\rPress ESC to quit.\n\rScore: " << CYAN << _score << RESET << endl;
     else
-        cout << RESET <<"\rGame over!\nScore: " << _score << endl;
+        cout << RESET;
 
     cout << "\r+" << string(_width, '-') << "+" << endl;
 
     for (auto& line : _board)
     {
         cout << "\r|";
-        for (auto& str : line) cout << str;
+        for (auto& str : line)
+            cout << str;
         cout << "|" << endl;
     }
 
@@ -77,19 +86,19 @@ void Snake::updateDirection(int key)
 {
     switch (key) {
     // right
-    case 261 :
+    case 67 :
         _direction = (_direction == 3) ? 3 : 1;
         break;
     // down
-    case 258 :
+    case 66 :
         _direction = (_direction == 4) ? 4 : 2;
         break;
     // left
-    case 260 :
+    case 68 :
         _direction = (_direction == 1) ? 1 : 3;
         break;
     // up
-    case 259 :
+    case 65 :
         _direction = (_direction == 2) ? 2 : 4;
         break;
     default :
@@ -204,13 +213,22 @@ pii Snake::getRandomPoint(void)
 
 void Snake::play(void)
 {
+    char key;
+
     while (true)
     {
-        int key = getch();  // Wait for user input;
-        if (key == 27)
+        // Check if a character is available in stdin
+        while (read(STDIN_FILENO, &key, 1) > 0)
+		{
+            // Arrow key sequence, read the next two characters
+            if (read(STDIN_FILENO, &key, 1) > 0 && key == 91)
+                read(STDIN_FILENO, &key, 1);
+        }
+
+        if (key == 27) // Check for escape character (ASCII value 27)
             break;
         this_thread::sleep_for(chrono::milliseconds(_speed));
-        this->updateDirection(key);
+        this->updateDirection((int)key);
         if (this->updateBoard())
             _currentChance = _chance;
         this->clearTerminal();
@@ -220,8 +238,47 @@ void Snake::play(void)
 
 void Snake::gameOver(void)
 {
-    refresh();  // Refresh the screen
-    endwin();   // End the ncurses session
+    this->clearTerminal();
+    this->gameOverBoard();
     this->printBoard(1);
+
+    // Restore original terminal settings before exiting
+    tcsetattr(STDIN_FILENO, TCSANOW, &_oldt);
+}
+
+void Snake::gameOverBoard(void)
+{
+    vs gameOver = {"                                        ",
+                   "                                        ",
+                   "   #####      ##    ##   ##  #######    ",
+                   "  ##   ##    ####   ### ###   ##  ##    ",
+                   "  ##        ##  ##  #######   ##        ",
+                   "  ##        ######  ## # ##   ####      ",
+                   "  ##  ###   ##  ##  ##   ##   ##        ",
+                   "  ##   ##   ##  ##  ##   ##   ##  ##    ",
+                   "   #####    ##  ##  ##   ##  #######    ",
+                   "                                        ",
+                   "   #####    ##  ##  #######  ######     ",
+                   "  ##   ##   ##  ##   ##  ##   ##  ##    ",
+                   "  ##   ##   ##  ##   ##       ##  ##    ",
+                   "  ##   ##   ##  ##   ####     #####     ",
+                   "  ##   ##   ##  ##   ##       ####      ",
+                   "  ##   ##    ####    ##  ##   ## ##     ",
+                   "   #####      ##    #######  ###  ##    ",
+                   "                                        ",
+                   "                                        ",
+                   "                                        "};
+
+    gameOver.back() = "         You scored " + to_string(_score) + " points.";
+    gameOver.back() += string(40 - gameOver.back().size(), ' ');
+
+    for (int j{}; j < _board.size(); ++j)
+        for (int i{}; i < _board[j].size(); ++i)
+                _board[j][i] = gameOver[j][i];
+
+    _board.back()[0] = GREEN + string(1, ' ');
+    _board.back().back() = RESET + string(1, ' ');
+    _board.push_back(_board[gameOver.size() - 2]);
+    _board.push_back(_board[gameOver.size() - 2]);
 }
 

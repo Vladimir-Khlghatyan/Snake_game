@@ -5,11 +5,13 @@
 #include <vector>
 #include <queue>
 #include <set>
-#include <ncurses.h>
 #include <thread>
 #include <chrono>
 #include <algorithm>
 #include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <termios.h>
 
 #define RED		"\33[1;31m"
 #define GREEN	"\33[1;32m"
@@ -33,6 +35,9 @@ using spii	= set<pair<int,int>>;
 class Snake
 {
 	private:
+		struct termios	_oldt;
+		struct termios	_newt;
+
 		int		_direction;		// 1 right, 2 down, 3 left, 4 up
 		int		_speed; 		// update time in milliseconds
 		int 	_score;
@@ -52,6 +57,7 @@ class Snake
 		Snake(int height, int width);
 		~Snake(void);
 
+		void	initNecessaryLibraries(void);
 		void 	initBoard(void);
 		void	printBoard(int mode);
 		void	updateDirection(int key);
@@ -59,5 +65,8 @@ class Snake
 		void	clearTerminal(void);
 		pii		getRandomPoint(void);
 		void	play(void);
+		void 	gameOverBoard(void);
 		void	gameOver(void);
 };
+
+

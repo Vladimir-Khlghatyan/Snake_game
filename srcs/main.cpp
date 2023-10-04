@@ -5,7 +5,6 @@ int main(void)
     Snake s(20, 40);
     s.play();
     s.gameOver();
-
     return 0;
 }
 

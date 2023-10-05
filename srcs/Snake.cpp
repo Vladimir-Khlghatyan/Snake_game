@@ -3,7 +3,7 @@
 Snake::Snake(int height, int width)
 {
     _direction = 1;
-    _speed = 200;   // update time in milliseconds
+    _speed = 150;   // update time in milliseconds
     _score = 0;
 
     _height = height;
@@ -70,11 +70,16 @@ void Snake::printBoard(int mode)
 
     cout << "\r+" << string(_width, '-') << "+" << endl;
 
-    for (auto& line : _board)
+    for (int j{}; j < _board.size(); ++j)
     {
         cout << "\r|";
-        for (auto& str : line)
-            cout << str;
+        for (int i{}; i < _board[j].size(); ++i)
+        {
+            if (j == _head.first && i == _head.second && mode == 0)
+                cout << RED << "O" << RESET;
+            else
+                cout << _board[j][i];
+        }
         cout << "|" << endl;
     }
 
@@ -188,8 +193,7 @@ bool Snake::updateBoard(void)
         auto frog = this->getRandomPoint();
         _board[frog.first][frog.second] = FROG;
 
-        if (_score % 5 == 0)
-            _speed -= 50;
+        _speed = max(50, _speed - 10);
     }
 
     return true;
@@ -227,7 +231,11 @@ void Snake::play(void)
 
         if (key == 27) // Check for escape character (ASCII value 27)
             break;
-        this_thread::sleep_for(chrono::milliseconds(_speed));
+
+        /* since the height of the board is half the width,
+        we adjust the speed based on the direction of movement */
+        this_thread::sleep_for(chrono::milliseconds(_speed * ((_direction % 2) ? 1 : 2)));
+
         this->updateDirection((int)key);
         if (this->updateBoard())
             _currentChance = _chance;
@@ -270,7 +278,7 @@ void Snake::gameOverBoard(void)
                    "                                        "};
 
     gameOver.back() = "         You scored " + to_string(_score) + " points.";
-    gameOver.back() += string(40 - gameOver.back().size(), ' ');
+    gameOver.back() += string(_board[0].size() - gameOver.back().size(), ' ');
 
     for (int j{}; j < _board.size(); ++j)
         for (int i{}; i < _board[j].size(); ++i)

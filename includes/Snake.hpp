@@ -22,7 +22,7 @@
 #define WHITE	"\33[1;37m"
 #define RESET	"\33[0;m"
 
-#define SNAKE	"\33[1;31mo\33[0;m"
+#define SNAKE	"\33[1;34mo\33[0;m"
 #define FROG	"\33[1;32m*\33[0;m"
 
 using namespace std;

@@ -5,7 +5,7 @@
 
 If you have already installed the termios.h Library:<br>
   - open the terminal <br>
-  - clone the this repository <br>
+  - clone this repository <br>
     `git clone https://github.com/Vladimir-Khlghatyan/Snake_game` <br>
   - go to Snake_game directory <br>
     `cd ./Snake_game` <br>

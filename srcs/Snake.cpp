@@ -12,6 +12,8 @@ Snake::Snake(int height, int width)
     _chance = 2;
     _currentChance = _chance;
 
+    srand((unsigned)time(NULL));
+
     this->initNecessaryLibraries();
     this->initBoard();
     this->printBoard(0);
@@ -19,7 +21,8 @@ Snake::Snake(int height, int width)
 
 Snake::~Snake(void)
 {
-
+    // Restore original terminal settings even on abnormal exit
+    tcsetattr(STDIN_FILENO, TCSANOW, &_oldt);
 }
 
 void Snake::initNecessaryLibraries(void)
@@ -180,12 +183,14 @@ bool Snake::updateBoard(void)
     _board[_head.first][_head.second] = SNAKE;
     _order.push(_head);
     _usedIndexes.insert(_head);
+    _freeIndexes.erase(_head); // the head cell is now occupied
 
     if (!frogEated)
     {
-        _board[_order.front().first][_order.front().second] = " ";
-        _freeIndexes.erase(_order.front());
+        pii tail = _order.front();
         _order.pop();
+        _board[tail.first][tail.second] = " ";
+        _freeIndexes.insert(tail); // the vacated tail cell is now free
     }
     else
     {
@@ -207,17 +212,22 @@ void Snake::clearTerminal(void)
 
 pii Snake::getRandomPoint(void)
 {
-    srand((unsigned)time(NULL));
+    // No free cells left (board full) -- keep the current head as a no-op
+    if (_freeIndexes.empty())
+        return _head;
+
     int random = rand() % _freeIndexes.size();
     auto it = _freeIndexes.begin();
     while (random--)
         ++it;
-    return *it;
+    pii point = *it;
+    _freeIndexes.erase(it); // the cell is now occupied by the frog
+    return point;
 }
 
 void Snake::play(void)
 {
-    char key;
+    char key = 0;
 
     while (true)
     {
